@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack API</title>
+
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <h1 style="text-align: center;">Find Questions from Stackoverflow</h1>
+    <form action="search" method="GET">
+        <div class="row">
+            <div>
+                <input type="hidden" name="page" value="1">
+                {% if tm %}
+                <input type="text" name="term" value="{{tm}}" placeholder="{{tm}}">
+                {% else %}
+                <input type="text" name="term" placeholder="Search question...">
+                {% endif %}
+                <select name="order" id="">
+                    <option value="asc">Ascending Order</option>
+                    <option value="desc">Descending Order</option>
+                </select>
+
+                <select name="sort" id="">
+                    <option value="activity">Activity(Sort default)</option>
+                    <option value="votes">Votes</option>
+                    <option value="creation">Creation</option>
+                    <option value="relevence">Relevence</option>
+                </select>
+                <input type="submit"  value="search" name="" id="">
+            </div>
+           
+        </div>
+       
+    </form>
+
+    {% for i in res %}
+    <div class="main">
+        <h5>[*] {{i.title}}</h5>
+    </div>
+    {% endfor %}
+    <br><br>
+
+    {{ pgs }}<br>
+    
+    {% if pgs.has_previous %}
+        {% if tm %}
+        <a href="/page?page=1&term={{tm}}&order={{ord}}&sort={{srt}}"><button>&laquo First</button></a>
+        <a href="/page?page={{ pgs.previous_page_number }}&term={{tm}}&order=desc&sort=votes"><button>Previous</button> </a>
+        {% else %}
+
+        <a href="/page?page=1"><button>&laquo First</button></a>
+        <a href="/page?page={{ pgs.previous_page_number }}"><button>Previous</button> </a>
+        {% endif %}
+    {% endif %}
+
+    Page {{ pgs.number }} of {{ pgs.paginator.num_pages }}
+
+    {% if pgs.has_next %}
+        {% if tm %}
+            <a href="/page?page={{ pgs.next_page_number }}&term={{tm}}&order={{ord}}&sort={{srt}}"> <button>Next</button> </a>
+            <a href="/page?page={{ pgs.paginator.num_pages }}&term={{tm}}&order={{ord}}&sort={{srt}}"><button>Last &raquo</button></a>
+        {% else %}
+            <a href="/page?page={{ pgs.next_page_number }}"> <button>Next</button> </a>
+            <a href="/page?page={{ pgs.paginator.num_pages }}"><button>Last &raquo</button></a>
+        {% endif %}
+    {% endif %}
+
+
+   <style>
+    *{
+        margin: 20px;
+        margin-top: 70px;
+    }
+    .main{
+        width: 90%;
+        min-height: 70px;
+        margin: 15px;
+        border: 0.5px solid black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+   </style>
+
+    
+</body>
+</html>
